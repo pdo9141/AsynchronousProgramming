@@ -16,6 +16,90 @@ namespace MyLogin
             InitializeComponent();
         }
 
+        private async void AsyncAwaitLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var result = await LoginAsync();
+
+                // everything after the await keyword is your continuation code
+                AsyncAwaitLoginButton.Content = result;
+            }
+            catch (Exception)
+            {
+                AsyncAwaitLoginButton.Content = "Login failed!";
+            }
+        }
+
+        private async Task<string> LoginAsync()
+        {
+            try
+            {
+                // continuation will run on UI thread when using async/await keywords
+                var loginTask = Task.Run(() => {
+                    Thread.Sleep(2000);
+                    return "Login Successful!";
+                });
+
+                var logTask = Task.Delay(2000); // Log the login
+
+                var purchaseTask = Task.Delay(1000); // Fetch purchases
+
+                await Task.WhenAll(loginTask, logTask, purchaseTask);
+
+                // everything after the await keyword is your continuation code
+                return loginTask.Result;
+            }
+            catch (Exception)
+            {
+                return "Login failed!";
+            }
+        }
+
+        /// <summary>
+        /// marking methods with "async void" is evil and should be avoided at all cost
+        /// but since event handlers must comply to an exact delegate signature
+        /// our hands are tied and we must do so
+        /// we must mark this event handler with the async keyword and await BadLoginAsync
+        /// to handle UnauthorizedAccessException thrown by BadLoginAsync
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void AsyncAwaitBadLoginButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var result = await BadLoginAsync();
+
+                // everything after the await keyword is your continuation code
+                AsyncAwaitBadLoginButton.Content = result;
+            }
+            catch (Exception)
+            {
+                AsyncAwaitBadLoginButton.Content = "Login Failed!";
+            }
+        }
+
+        private async Task<string> BadLoginAsync()
+        {
+            try
+            {
+                // continuation will run on UI thread when using async/await keywords
+                var result = await Task.Run(() => {
+                    throw new UnauthorizedAccessException();
+
+                    Thread.Sleep(2000);
+                    return "Login Successful!";
+                });
+
+                return result;
+            }
+            catch (Exception)
+            {
+                return "Login failed!";
+            }
+        }
+        
         private void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             LoginButton.IsEnabled = false;
