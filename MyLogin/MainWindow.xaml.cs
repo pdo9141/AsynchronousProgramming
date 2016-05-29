@@ -22,6 +22,10 @@ namespace MyLogin
             {
                 var result = await LoginAsync();
 
+                // if you must block using Wait or Result
+                // run it on a seperate thread to avoid deadlocking your application using below code
+                //var result = Task.Run(() => LoginAsync()).Result;
+
                 // everything after the await keyword is your continuation code
                 AsyncAwaitLoginButton.Content = result;
             }
