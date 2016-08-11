@@ -16,6 +16,7 @@
         <Button x:Name="LoginAwaitButton" Content="AWAIT LOGIN" HorizontalAlignment="Left" Margin="44,162,0,0" VerticalAlignment="Top" Width="198" Click="LoginAwaitButton_Click"/>
         <Button x:Name="AsyncAwaitLoginButton" Content="ASYNC AWAIT LOGIN" HorizontalAlignment="Left" Margin="44,225,0,0" VerticalAlignment="Top" Width="198" Click="AsyncAwaitLoginButton_Click"/>
         <Button x:Name="AsyncAwaitBadLoginButton" Content="ASYNC AWAIT BAD LOGIN" HorizontalAlignment="Left" Margin="44,256,0,0" VerticalAlignment="Top" Width="198" Click="AsyncAwaitBadLoginButton_Click"/>
+        <Button x:Name="BasicButton" Content="Basic" HorizontalAlignment="Left" Margin="44,286,0,0" VerticalAlignment="Top" Width="198" Click="BasicButton_Click"/>
 
     </Grid>
 </Window>

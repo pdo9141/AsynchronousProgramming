@@ -16,6 +16,29 @@ namespace MyLogin
             InitializeComponent();
         }
 
+        private void BasicButton_Click(object sender, RoutedEventArgs e)
+        {
+            CallBigImportantMethod();
+            BasicButton.Content = "Waiting...";
+        }
+
+        private async void CallBigImportantMethod()
+        {
+            var result = await BigLongImportantMethodAsync("Phillip");
+            BasicButton.Content = result;
+        }
+
+        private Task<string> BigLongImportantMethodAsync(string name)
+        {
+            return Task.Factory.StartNew(() => BigLongImportantMethod(name));
+        }
+
+        private string BigLongImportantMethod(string name)
+        {
+            Thread.Sleep(3000);
+            return "Hello, " + name;
+        }
+        
         private async void AsyncAwaitLoginButton_Click(object sender, RoutedEventArgs e)
         {
             try
