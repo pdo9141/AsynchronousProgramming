@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -36,9 +37,72 @@ namespace ThreadingSamples
             //TestCancelTask();
             //TestCancelTask2();
             //TestAsyncAwait();
+            //TestAsyncAwait2();
+            //TestThreadMimicAsyncAwait();
             //TestThreadSynchronization();
             //TestDeadLock();
-            TestReaderWriter();
+            //TestReaderWriter();
+        }
+
+        public static void TestThreadMimicAsyncAwait()
+        {
+            ProcessFileWithThread();
+            Console.ReadLine();
+        }
+
+        static int characterCount = 0;
+        public static void ProcessFileWithThread()
+        {
+            int count = 0;
+            Thread thread = new Thread(() =>
+            {
+                count = CountCharacters();
+                //Action action = () => Console.WriteLine(count.ToString() + " characters in file");
+                Action action = new Action(SetLabelTextProperty);
+                //this.BeginInvoke(action);
+            });
+            thread.Start();
+
+            Console.WriteLine("Processing file. Please wait...");
+        }
+
+        private static void SetLabelTextProperty()
+        {
+            Console.WriteLine(characterCount.ToString() + " characters in file");
+        }
+
+        public static void TestAsyncAwait2()
+        {
+            ProcessFile();
+            Console.ReadLine();
+        }
+
+        public async static void ProcessFile()
+        {
+            // Create a task to execute CountCharacters() function
+            // CountCharacters() function returns int, so we created Task<int>
+            Task<int> task = new Task<int>(CountCharacters);
+            task.Start();
+
+            Console.WriteLine("Processing file. Please wait...");
+            // Wait until the long running task completes
+            int count = await task;
+            Console.WriteLine(count.ToString() + " characters in file");
+        }
+        
+        private static int CountCharacters()
+        {
+            int count = 0;
+            // Create a StreamReader and point it to the file to read
+            using (StreamReader reader = new StreamReader(@"C:\temp\input.txt"))
+            {
+                string content = reader.ReadToEnd();
+                count = content.Length;
+                // Make the program look busy for 5 seconds
+                Thread.Sleep(5000);
+            }
+
+            return count;
         }
 
         const int MaxValues = 25;
@@ -69,6 +133,7 @@ namespace ThreadingSamples
                 Thread.Sleep(1000);
             }
         }
+
         static void ReadThread(object state)
         {
             int id = Thread.CurrentThread.ManagedThreadId;

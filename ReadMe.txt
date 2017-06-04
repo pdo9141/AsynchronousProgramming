@@ -10,3 +10,4 @@
 04) What is the difference between Task.Run() and Task.Factory.StartNew()? Task.Run is recommended, Task.Factory.StartNew gives you ability to specify more options if needed, e.g, Task.Factory.StartNew(..., TaskCreationOptions.LongRunning);
 	So, in the .NET Framework 4.5, the new Task.Run method is introduced. This in no way obsoletes Task.Factory.StartNew, but rather should simply be thought of as a quick way to use Task.Factory.StartNew without needing to specify a bunch of parameters. 
 	It’s a shortcut. In fact, Task.Run is actually implemented in terms of the same logic used for Task.Factory.StartNew, just passing in some default parameters. When you pass an Action to Task.Run:
+05) A hard rule of thumb is the thread that creates a UI element should be the only thread that updates it.
